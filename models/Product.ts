@@ -73,4 +73,4 @@ productSchema.index({ category: 1, createdAt: -1 });
 
 const Product = mongoose.models.Product || mongoose.model<IProduct>('Product', productSchema);
 
-export default Product; 
+export default Product; // Modified on 2025-02-19 00:50:50
