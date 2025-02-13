@@ -1,0 +1,12 @@
+{
+  "buildCommand": "next build",
+  "devCommand": "next dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "outputDirectory": ".next",
+  "env": {
+    "MONGODB_URI": "WILL_BE_SET_IN_VERCEL_DASHBOARD",
+    "NEXT_PUBLIC_PAYFAST_MERCHANT_ID": "WILL_BE_SET_IN_VERCEL_DASHBOARD",
+    "NEXT_PUBLIC_PAYFAST_MERCHANT_KEY": "WILL_BE_SET_IN_VERCEL_DASHBOARD"
+  }
+} 
