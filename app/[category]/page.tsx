@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import connectDB from "@/lib/mongodb";
 import Product from "@/models/Product";
+import AddToCartButton from "@/app/components/AddToCartButton";
 
 interface ProductType {
   _id: string;
@@ -62,28 +63,29 @@ export default async function CategoryPage({
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
           {products.map((product: ProductType) => (
             <div key={product._id} className="group relative">
-              <div className="aspect-square w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:h-80">
-                <Image
-                  src={product.images[0]}
-                  alt={product.name}
-                  className="w-full h-full object-cover object-center lg:h-full lg:w-full"
-                  width={300}
-                  height={300}
-                />
-              </div>
-
-              <div className="mt-4 flex justify-between">
-                <div>
-                  <h3 className="text-sm text-gray-700">
-                    <Link href={`/product/${product._id}`}>
-                      {product.name}
-                    </Link>
-                  </h3>
-                  <p className="mt-1 text-sm text-gray-500">
-                    {product.category}
-                  </p>
+              <Link href={`/product/${product._id}`} className="block">
+                <div className="aspect-square w-full overflow-hidden rounded-xl bg-gray-100 relative">
+                  <Image
+                    src={product.images[0] || "https://via.placeholder.com/400x400?text=No+Image"}
+                    alt={product.name}
+                    className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                    width={400}
+                    height={400}
+                  />
+                  <div className="absolute inset-0 bg-black opacity-0 transition-opacity duration-300 group-hover:opacity-20" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <AddToCartButton product={product} />
+                  </div>
                 </div>
-                <p className="text-sm font-medium text-gray-900">
+              </Link>
+
+              <div className="mt-4 space-y-2">
+                <Link href={`/product/${product._id}`}>
+                  <h3 className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors line-clamp-1">
+                    {product.name}
+                  </h3>
+                </Link>
+                <p className="text-lg font-semibold text-gray-900">
                   {formatPrice(product.price)}
                 </p>
               </div>

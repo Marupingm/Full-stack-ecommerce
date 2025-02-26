@@ -96,6 +96,13 @@ export default function ShippingPage() {
     try {
       sessionStorage.setItem('shippingDetails', JSON.stringify(shippingDetails));
       
+      // Log the request payload
+      console.log('Submitting checkout with:', {
+        cartDetails,
+        shippingDetails,
+        totalAmount: totalPrice,
+      });
+      
       const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: {
@@ -108,7 +115,13 @@ export default function ShippingPage() {
         }),
       });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to process checkout');
+      }
+
       const data = await response.json();
+      console.log('Checkout response:', data);
 
       if (data.url) {
         window.location.href = data.url;
@@ -117,7 +130,7 @@ export default function ShippingPage() {
       }
     } catch (error) {
       console.error('Checkout error:', error);
-      toast.error('Error processing checkout', {
+      toast.error(error instanceof Error ? error.message : 'Error processing checkout', {
         className: 'bg-white border border-red-100',
         descriptionClassName: 'text-gray-600',
         style: { color: '#EF4444' }

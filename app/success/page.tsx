@@ -1,12 +1,19 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import confetti from "canvas-confetti";
+import { useShoppingCart } from "use-shopping-cart";
 
 export default function PaymentSuccess() {
+  const router = useRouter();
+  const { clearCart } = useShoppingCart();
+
   useEffect(() => {
+    // Clear the cart on successful payment
+    clearCart();
+
     // Trigger confetti animation when component mounts
     const end = Date.now() + 3 * 1000; // 3 seconds
     const colors = ["#a786ff", "#fd8bbc", "#eca184", "#f8deb1"];
@@ -37,6 +44,11 @@ export default function PaymentSuccess() {
     frame();
   }, []); // Empty dependency array means this effect runs once when component mounts
 
+  const handleContinueShopping = () => {
+    router.push('/');
+    router.refresh();
+  };
+
   return (
     <div className="h-screen flex flex-col items-center justify-center">
       <div className="bg-white p-6 md:mx-auto">
@@ -54,8 +66,11 @@ export default function PaymentSuccess() {
             Thank you for completing your secure online payment.
           </p>
           <p className="text-gray-600 mb-8">Have a great day!</p>
-          <Button asChild>
-            <Link href="/">Continue Shopping</Link>
+          <Button 
+            onClick={handleContinueShopping}
+            className="bg-[#0f172a] hover:bg-[#1e293b]"
+          >
+            Continue Shopping
           </Button>
         </div>
       </div>
