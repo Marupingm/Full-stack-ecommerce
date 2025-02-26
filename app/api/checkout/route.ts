@@ -52,13 +52,17 @@ export async function POST(req: Request) {
       .map(item => item.name)
       .join(', ');
 
+    // Get the base URL for the application
+    const appBaseUrl = process.env.NEXT_PUBLIC_API_URL || process.env.VERCEL_URL || 'http://localhost:3000';
+    const apiUrl = appBaseUrl.startsWith('http') ? appBaseUrl : `https://${appBaseUrl}`;
+
     // Construct the payment data with all required fields
     const data = {
       merchant_id: merchantId,
       merchant_key: merchantKey,
-      return_url: `${process.env.NEXT_PUBLIC_API_URL}/success`,
-      cancel_url: `${process.env.NEXT_PUBLIC_API_URL}/cart`,
-      notify_url: `${process.env.NEXT_PUBLIC_API_URL}/api/payfast-webhook`,
+      return_url: `${apiUrl}/success`,
+      cancel_url: `${apiUrl}/cart`,
+      notify_url: `${apiUrl}/api/payfast-webhook`,
       
       // Customer details
       name_first: shippingDetails.firstName,
@@ -79,11 +83,6 @@ export async function POST(req: Request) {
       
       // Test mode
       payment_method: 'cc',
-      subscription_type: '',
-      billing_date: '',
-      recurring_amount: '',
-      frequency: '',
-      cycles: '',
     };
 
     // Log the PayFast request for debugging

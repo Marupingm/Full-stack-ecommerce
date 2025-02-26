@@ -31,45 +31,30 @@ async function connectDB(): Promise<typeof mongoose> {
       return cached.conn;
     }
 
-    console.log('Creating new MongoDB connection...');
-    console.log('MongoDB URI:', MONGODB_URI.replace(/:[^:]*@/, ':****@')); // Hide password in logs
+    if (!cached.promise) {
+      console.log('Creating new MongoDB connection...');
 
-    const opts: mongoose.ConnectOptions = {
-      bufferCommands: true,
-      maxPoolSize: 10,
-      serverSelectionTimeoutMS: 30000,
-      socketTimeoutMS: 45000,
-      family: 4,
-      connectTimeoutMS: 30000,
-      heartbeatFrequencyMS: 1000,
-      retryWrites: true,
-      retryReads: true
-    };
+      const opts: mongoose.ConnectOptions = {
+        bufferCommands: true,
+        maxPoolSize: 10,
+        serverSelectionTimeoutMS: 30000,
+        socketTimeoutMS: 45000,
+        family: 4,
+        connectTimeoutMS: 30000,
+        heartbeatFrequencyMS: 1000,
+        retryWrites: true,
+        retryReads: true
+      };
 
-    if (mongoose.connections.length > 0) {
-      const activeConn = mongoose.connections[0];
-      if (activeConn.readyState !== 0) {
-        await mongoose.disconnect();
-        console.log('Disconnected from previous MongoDB connection');
-      }
+      cached.promise = mongoose.connect(MONGODB_URI, opts);
     }
 
-    const conn = await mongoose.connect(MONGODB_URI, opts);
+    cached.conn = await cached.promise;
     console.log('Successfully connected to MongoDB');
-    
-    conn.connection.on('error', (err) => {
-      console.error('MongoDB connection error:', err);
-    });
 
-    conn.connection.on('disconnected', () => {
-      console.log('MongoDB disconnected');
-      cached.conn = null;
-      cached.promise = null;
-    });
-    
-    cached.conn = conn;
-    return conn;
+    return cached.conn;
   } catch (error) {
+    cached.promise = null;
     console.error('MongoDB connection error details:', {
       name: error instanceof Error ? error.name : 'Unknown error',
       message: error instanceof Error ? error.message : 'Unknown error message',

@@ -6,13 +6,16 @@ import { Toaster } from "sonner";
 import { CheckCircle2, XCircle } from "lucide-react";
 
 export default function Providers({ children }: { children: ReactNode }) {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || process.env.VERCEL_URL || 'http://localhost:3000';
+  const apiUrl = baseUrl.startsWith('http') ? baseUrl : `https://${baseUrl}`;
+
   return (
     <CartProvider
       mode="payment"
       cartMode="client-only"
       stripe={process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!}
-      successUrl="http://localhost:3000/success"
-      cancelUrl="http://localhost:3000/cart"
+      successUrl={`${apiUrl}/success`}
+      cancelUrl={`${apiUrl}/cart`}
       currency="ZAR"
       billingAddressCollection={false}
       shouldPersist={true}
