@@ -9,6 +9,7 @@ import {
 
 import Image from "next/image";
 import { useShoppingCart } from "use-shopping-cart";
+import { useRouter } from "next/navigation";
 
 // Helper function to format price in ZAR
 function formatPrice(price: number) {
@@ -19,87 +20,20 @@ function formatPrice(price: number) {
 }
 
 export default function ShoppingCartModal() {
+  const router = useRouter();
   const {
     cartCount,
     shouldDisplayCart,
     handleCartClick,
     cartDetails,
     removeItem,
-    totalPrice = 0,
+    totalPrice,
+    redirectToCheckout,
   } = useShoppingCart();
 
-  const handleCheckout = () => {
-    try {
-      const timestamp = new Date().toISOString().replace(/[-:.]/g, '');
-      const paymentId = `PF_CART_${timestamp}`;
-      const cartCount = Object.values(cartDetails ?? {}).length;
-
-      // Create form and submit it
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = 'https://sandbox.payfast.co.za/eng/process';
-
-      const merchantId = process.env.NEXT_PUBLIC_PAYFAST_MERCHANT_ID;
-      const merchantKey = process.env.NEXT_PUBLIC_PAYFAST_MERCHANT_KEY;
-
-      // Debug log for credentials
-      console.log('PayFast Credentials:', {
-        merchantId: merchantId || 'Not set',
-        merchantKeyLength: merchantKey ? merchantKey.length : 0
-      });
-
-      if (!merchantId || !merchantKey) {
-        console.error('PayFast credentials are not properly configured');
-        return;
-      }
-
-      // Format price to 2 decimal places
-      const formattedPrice = Number(totalPrice).toFixed(2);
-
-      // Add PayFast required fields
-      const fields = {
-        merchant_id: merchantId,
-        merchant_key: merchantKey,
-        amount: formattedPrice,
-        item_name: `Order #${paymentId}`,
-        item_description: `Cart order with ${cartCount} items`,
-        return_url: `${window.location.origin}/success`,
-        cancel_url: `${window.location.origin}/cancel`,
-        notify_url: `${window.location.origin}/api/payfast/notify`,
-        m_payment_id: paymentId,
-        email_confirmation: '1',
-        confirmation_address: 'test@example.com',
-        name_first: 'Test',
-        name_last: 'Customer',
-        email_address: 'test@example.com'
-      };
-
-      console.log('PayFast checkout fields:', fields);
-
-      // Add fields to form
-      Object.entries(fields).forEach(([key, value]) => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = key;
-        input.value = value.toString();
-        form.appendChild(input);
-      });
-
-      // Debug form data before submission
-      const formData = new FormData(form);
-      console.log('Form data before submission:');
-      Array.from(formData.entries()).forEach(([key, value]) => {
-        console.log(`${key}: ${value}`);
-      });
-
-      // Add form to body and submit
-      document.body.appendChild(form);
-      form.submit();
-      document.body.removeChild(form);
-    } catch (error) {
-      console.error('PayFast checkout error:', error);
-    }
-  };
+  async function handleCheckoutClick() {
+    router.push('/shipping');
+  }
 
   return (
     <Sheet open={shouldDisplayCart} onOpenChange={() => handleCartClick()}>
@@ -130,7 +64,7 @@ export default function ShoppingCartModal() {
                         <div>
                           <div className="flex justify-between text-base font-medium text-gray-900">
                             <h3>{entry.name}</h3>
-                            <p className="ml-4">{formatPrice(entry.price)}</p>
+                            <p className="ml-4">R{entry.price / 100}</p>
                           </div>
                           <p className="mt-1 text-sm text-gray-500 line-clamp-2">
                             {entry.description}
@@ -161,15 +95,15 @@ export default function ShoppingCartModal() {
           <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
             <div className="flex justify-between text-base font-medium text-gray-900">
               <p>Subtotal:</p>
-              <p>{formatPrice(totalPrice)}</p>
+              <p>R{totalPrice! / 100}</p>
             </div>
             <p className="mt-0.5 text-sm text-gray-500">
-              Shipping and taxes are calculated at checkout.
+              Shipping and taxes calculated at checkout.
             </p>
 
             <div className="mt-6">
-              <Button 
-                onClick={handleCheckout} 
+              <Button
+                onClick={handleCheckoutClick}
                 className="w-full"
                 disabled={cartCount === 0}
               >

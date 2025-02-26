@@ -37,13 +37,35 @@ async function connectDB(): Promise<typeof mongoose> {
     const opts: mongoose.ConnectOptions = {
       bufferCommands: true,
       maxPoolSize: 10,
-      serverSelectionTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 30000,
       socketTimeoutMS: 45000,
-      family: 4
+      family: 4,
+      connectTimeoutMS: 30000,
+      heartbeatFrequencyMS: 1000,
+      retryWrites: true,
+      retryReads: true
     };
+
+    if (mongoose.connections.length > 0) {
+      const activeConn = mongoose.connections[0];
+      if (activeConn.readyState !== 0) {
+        await mongoose.disconnect();
+        console.log('Disconnected from previous MongoDB connection');
+      }
+    }
 
     const conn = await mongoose.connect(MONGODB_URI, opts);
     console.log('Successfully connected to MongoDB');
+    
+    conn.connection.on('error', (err) => {
+      console.error('MongoDB connection error:', err);
+    });
+
+    conn.connection.on('disconnected', () => {
+      console.log('MongoDB disconnected');
+      cached.conn = null;
+      cached.promise = null;
+    });
     
     cached.conn = conn;
     return conn;
