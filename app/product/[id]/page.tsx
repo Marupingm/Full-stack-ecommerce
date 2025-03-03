@@ -1,5 +1,6 @@
 import AddToBag from "@/app/components/AddToBag";
 import ImageGallery from "@/app/components/ImageGallery";
+import SimilarProducts from "@/app/components/SimilarProducts";
 import connectDB from "@/lib/mongodb";
 import Product from "@/models/Product";
 
@@ -25,10 +26,22 @@ async function getData(id: string) {
   try {
     await connectDB();
     const product = await Product.findById(id).lean();
-    return JSON.parse(JSON.stringify(product));
+    
+    // Fetch similar products (same category, different ID)
+    const similarProducts = await Product.find({
+      category: product.category,
+      _id: { $ne: id }
+    })
+    .limit(8)
+    .lean();
+
+    return {
+      product: JSON.parse(JSON.stringify(product)),
+      similarProducts: JSON.parse(JSON.stringify(similarProducts))
+    };
   } catch (error) {
     console.error("Error fetching product:", error);
-    return null;
+    return { product: null, similarProducts: [] };
   }
 }
 
@@ -37,7 +50,7 @@ export default async function ProductPage({
 }: {
   params: { id: string };
 }) {
-  const product = await getData(params.id);
+  const { product, similarProducts } = await getData(params.id);
 
   if (!product) {
     return (
@@ -90,6 +103,12 @@ export default async function ProductPage({
               />
             </div>
           </div>
+        </div>
+
+        {/* Similar Products Section */}
+        <div className="mt-16 mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Similar Products</h2>
+          <SimilarProducts products={similarProducts} currentProductId={product._id} />
         </div>
       </div>
     </div>
