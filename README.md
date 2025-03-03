@@ -1,61 +1,51 @@
-# TopsyCommerce - Next.js E-Commerce Platform
+# Nike E-commerce Store
 
-A modern e-commerce platform built with Next.js, MongoDB, and PayFast integration. Features a responsive design, shopping cart functionality, and secure payment processing.
+A modern, full-stack e-commerce application built with Next.js 14, featuring a sleek UI for browsing Nike products, shopping cart functionality, and secure payment processing.
 
 ## Features
 
-- 🛍️ Product catalog with category filtering
-- 🛒 Shopping cart functionality
-- 💳 Secure PayFast payment integration
-- 📱 Fully responsive design
+- 🛍️ Browse products by category (Men, Women, Teens)
+- 🔍 View detailed product information with image galleries
+- 🛒 Shopping cart functionality with real-time updates
+- 💳 Secure payment processing with PayFast integration
+- 📱 Responsive design for all devices
 - 🎨 Modern UI with Tailwind CSS
-- 🔍 Product search and filtering
-- 🏷️ Category-based navigation
-- 🔒 Secure payment processing
-- 📦 MongoDB integration for product management
+- 🔒 MongoDB database integration
+- 🚀 Server-side rendering for optimal performance
 
 ## Tech Stack
 
 - **Frontend:**
   - Next.js 14
   - React 18
+  - TypeScript
   - Tailwind CSS
   - Lucide Icons
-  - TypeScript
-
-- **Backend:**
-  - MongoDB
-  - Mongoose
-  - Next.js API Routes
-
-- **Payment Processing:**
-  - PayFast Integration
-
-- **State Management:**
+  - Sonner (Toast notifications)
   - use-shopping-cart
 
-## Getting Started
+- **Backend:**
+  - Next.js API Routes
+  - MongoDB with Mongoose
+  - PayFast Payment Integration
 
-### Prerequisites
+- **Development Tools:**
+  - TypeScript
+  - ESLint
+  - Prettier
+  - PostCSS
 
-- Node.js 18+ installed
-- MongoDB Atlas account
-- PayFast merchant account
+## Prerequisites
 
-### Installation
+Before you begin, ensure you have the following installed:
+- Node.js (v18 or higher)
+- npm or yarn
+- MongoDB database
 
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd nextjs-topsycommerce
-```
+## Environment Variables
 
-2. Install dependencies:
-```bash
-npm install
-```
+Create a `.env` file in the root directory with the following variables:
 
-3. Create a `.env` file in the root directory with the following variables:
 ```env
 MONGODB_URI=your_mongodb_connection_string
 NEXT_PUBLIC_PAYFAST_MERCHANT_ID=your_payfast_merchant_id
@@ -63,139 +53,75 @@ NEXT_PUBLIC_PAYFAST_MERCHANT_KEY=your_payfast_merchant_key
 NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
 
-4. Run the development server:
+## Installation
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd Full-stack-ecommerce
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Seed the database:
+```bash
+npm run seed
+```
+
+4. Start the development server:
 ```bash
 npm run dev
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### Database Setup
-
-1. Create a MongoDB Atlas cluster
-2. Add your IP address to the IP Access List
-3. Create a database user
-4. Get your connection string and add it to the `.env` file
-
-## Deployment
-
-This project is configured for deployment on Vercel:
-
-1. Push your code to a Git repository
-2. Import the project in Vercel
-3. Configure environment variables in the Vercel dashboard
-4. Deploy!
+The application will be available at `http://localhost:3000`
 
 ## Project Structure
 
 ```
-nextjs-topsycommerce/
-├── app/                    # Next.js app directory
-│   ├── api/               # API routes
-│   ├── components/        # React components
-│   └── [category]/        # Dynamic category pages
-├── lib/                   # Utility functions
-├── models/               # MongoDB models
-└── public/               # Static assets
+├── app/
+│   ├── components/     # Reusable React components
+│   ├── models/        # MongoDB models
+│   ├── lib/           # Utility functions and configurations
+│   ├── [category]/    # Dynamic category pages
+│   ├── product/       # Product detail pages
+│   └── api/          # API routes
+├── public/           # Static assets
+├── scripts/         # Database seeding scripts
+└── styles/         # Global styles and Tailwind configuration
 ```
 
-## Features in Detail
+## Available Scripts
 
-### Shopping Cart
-- Add/remove items
-- Adjust quantities
-- Persistent cart state
-- Real-time price updates
+- `npm run dev` - Start development server
+- `npm run build` - Build production application
+- `npm start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run seed` - Seed the database with sample products
 
-### Payment Processing
-- Secure PayFast integration
-- Order confirmation
-- Success/Cancel pages
-- Payment notifications
+## Database
 
-### Product Management
-- MongoDB integration
-- Category organization
-- Image management
-- Stock tracking
+The application uses MongoDB with Mongoose for data management. The database includes collections for:
+- Products (with categories, sizes, images, and pricing)
+- Orders (future implementation)
+- Users (future implementation)
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the LICENSE file for details
 
 ## Acknowledgments
 
-- Next.js team for the amazing framework
-- Vercel for hosting
-- PayFast for payment processing
-- MongoDB for database services
-
-```bash
-npm i stripe use-shopping-cart next-sanity @stripe/stripe-js @sanity/image-url --force
-```
-
-## Hero Images:
-https://github.com/ski043/nextjs-commerce-tutorial/tree/main/public/HeroImages
-
-## Products:
-
-#Product One:
-Nike Air VaporMax 2023 Flyknit
-
-Price: 200
-
-Category: Men
-
-description:
-Elevate your sneaker game to new heights with the latest evolution of the iconic Air VaporMax series. The 2023 Flyknit combines cutting-edge technology, exceptional comfort, and bold style. Its innovative Flyknit upper offers a second-skin fit, ensuring a snug yet breathable feel with every step. The renowned VaporMax sole unit delivers unparalleled cushioning and responsiveness, providing a smooth ride that's perfect for both athletic performance and street-style fashion.
-
-images: https://github.com/ski043/nextjs-commerce-tutorial/tree/main/public/ProductOne
-
-
-#Product Two:
-Nike Sportswear Phoenix Fleece
-
-Price: 35
-
-Category: Women
-
-Description:
-Crafted with a blend of warmth and style, the Phoenix Fleece is a versatile addition to your wardrobe. Its soft and cozy fleece fabric offers a perfect balance of comfort and durability, making it ideal for cool days and relaxed outings. With a modern, sporty design and the iconic Nike Swoosh, this fleece adds a touch of urban flair to your look. Whether you're hitting the gym or hanging out with friends, the Nike Sportswear Phoenix Fleece keeps you both cozy and stylish. Elevate your everyday wear with this classic piece of Nike Sportswear.
-
-images: https://github.com/ski043/nextjs-commerce-tutorial/tree/main/public/ProductTwo
-
-#Product Three:
-Nike Air Force 1 '07
-
-Price: 85
-
-Category: Teens
-
-Description:
-The Nike Air Force 1 '07 represents a legend in the world of sneakers. With a design that transcends generations, this classic silhouette has remained a symbol of street-style culture for over three decades. Its white leather upper and clean lines are a canvas for self-expression, allowing you to pair it with any outfit, from casual to chic.
-
-Images: https://github.com/ski043/nextjs-commerce-tutorial/tree/main/public/ProductThree
-
-#Product Four
-Nike Windrunner
-
-Price: 200
-
-Category: Men
-
-Description:
-The Nike Windrunner is more than just a jacket; it's a symbol of enduring style and performance. With a design that has stood the test of time, this lightweight and versatile outerwear piece is your go-to choice for brisk mornings, breezy afternoons, and everything in between. Its distinctive chevron design on the chest pays homage to its heritage, while the modern materials and construction ensure it's ready for the demands of today.
-
-Images: https://github.com/ski043/nextjs-commerce-tutorial/tree/main/public/ProductFour
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-// Modified on 2025-02-19 00:50:51
-// Modified on 2025-02-19 00:52:31
+- Nike product images from Unsplash
+- UI components inspired by modern e-commerce best practices
+- Built with love using Next.js and React
