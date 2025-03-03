@@ -1,20 +1,8 @@
 {
-  "version": 2,
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": "nextjs",
-  "outputDirectory": ".next",
-  "env": {
-    "MONGODB_URI": "@mongodb_uri",
-    "NEXT_PUBLIC_PAYFAST_MERCHANT_ID": "@payfast_merchant_id",
-    "NEXT_PUBLIC_PAYFAST_MERCHANT_KEY": "@payfast_merchant_key",
-    "NEXT_PUBLIC_API_URL": "@api_url"
-  },
-  "images": {
-    "domains": ["images.unsplash.com", "plus.unsplash.com", "static.nike.com"],
-    "minimumCacheTTL": 60
-  },
   "headers": [
     {
       "source": "/api/(.*)",
@@ -25,18 +13,5 @@
         { "key": "Access-Control-Allow-Headers", "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" }
       ]
     }
-  ],
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/"
-    }
   ]
-} // Modified on 2025-02-19 00:50:50
-// Modified on 2025-02-19 00:52:35
+}
