@@ -2,12 +2,13 @@
   "name": "nextjs-topsycommerce",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "ts-node --project tsconfig.json scripts/seed.ts"
+    "seed": "node scripts/seed.cjs"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.5",
@@ -34,12 +35,15 @@
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.17",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.7",
     "eslint": "^8",
     "eslint-config-next": "14.0.0",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3"
   }
 }
