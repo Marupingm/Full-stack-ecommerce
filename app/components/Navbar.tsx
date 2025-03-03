@@ -84,6 +84,29 @@ export default function Navbar() {
           isMobileMenuOpen ? "translate-y-0" : "-translate-y-full"
         } transition-transform duration-300 ease-in-out`}
       >
+        <div className="flex items-center justify-between p-4 border-b">
+          <Link href="/" className="flex items-center space-x-2" onClick={() => setIsMobileMenuOpen(false)}>
+            <ShoppingCart className="h-6 w-6 text-blue-600" />
+            <h1 className="text-xl font-bold">
+              Topsy<span className="text-blue-600">Commerce</span>
+            </h1>
+          </Link>
+          <Button
+            variant={"outline"}
+            onClick={() => {
+              handleCartClick();
+              setIsMobileMenuOpen(false);
+            }}
+            className="relative flex items-center justify-center h-10 w-10 rounded-full border hover:bg-blue-50 transition-all duration-300"
+          >
+            <ShoppingBag className="h-4 w-4" />
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
+          </Button>
+        </div>
         <nav className="flex flex-col p-4 space-y-3">
           {links.map((link, idx) => (
             <Link
