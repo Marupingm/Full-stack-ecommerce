@@ -3,9 +3,20 @@ import ImageGallery from "@/app/components/ImageGallery";
 import SimilarProducts from "@/app/components/SimilarProducts";
 import connectDB from "@/lib/mongodb";
 import Product from "@/models/Product";
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
-interface ProductType extends Document {
+interface MongoProduct {
+  _id: Types.ObjectId;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  sizes: string[];
+  images: string[];
+  __v?: number;
+}
+
+interface ProductType {
   _id: string;
   name: string;
   description: string;
@@ -13,6 +24,7 @@ interface ProductType extends Document {
   category: string;
   sizes: string[];
   images: string[];
+  __v?: number;
 }
 
 // Helper function to format price in ZAR
@@ -26,7 +38,7 @@ function formatPrice(price: number) {
 async function getData(id: string) {
   try {
     await connectDB();
-    const product = await Product.findById(id).lean() as ProductType | null;
+    const product = await Product.findById(id).lean() as MongoProduct | null;
     
     if (!product) {
       return { product: null, similarProducts: [] };
@@ -38,11 +50,34 @@ async function getData(id: string) {
       _id: { $ne: id }
     })
     .limit(8)
-    .lean() as ProductType[];
+    .lean() as MongoProduct[];
+
+    // Convert MongoDB documents to plain objects and ensure they match ProductType
+    const formattedProduct: ProductType = {
+      _id: product._id.toString(),
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      category: product.category,
+      sizes: product.sizes,
+      images: product.images,
+      __v: product.__v
+    };
+
+    const formattedSimilarProducts: ProductType[] = similarProducts.map(p => ({
+      _id: p._id.toString(),
+      name: p.name,
+      description: p.description,
+      price: p.price,
+      category: p.category,
+      sizes: p.sizes,
+      images: p.images,
+      __v: p.__v
+    }));
 
     return {
-      product: JSON.parse(JSON.stringify(product)),
-      similarProducts: JSON.parse(JSON.stringify(similarProducts))
+      product: formattedProduct,
+      similarProducts: formattedSimilarProducts
     };
   } catch (error) {
     console.error("Error fetching product:", error);
