@@ -4,17 +4,21 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'images.unsplash.com',
+        hostname: 'images.unsplash.com'
       },
       {
         protocol: 'https',
-        hostname: 'plus.unsplash.com',
+        hostname: 'plus.unsplash.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'static.nike.com'
       }
-    ],
+    ]
   },
   // Ensure production builds are optimized
   reactStrictMode: true,
-  swcMinify: true,
+  swcMinify: true
 };
 
 module.exports = nextConfig;

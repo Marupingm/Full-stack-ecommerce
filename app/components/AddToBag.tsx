@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useShoppingCart } from "use-shopping-cart";
+import { toast } from "sonner";
 
 interface AddToBagProps {
   name: string;
@@ -29,12 +30,21 @@ export default function AddToBag({
     id,
   };
 
+  const handleAddToCart = () => {
+    addItem(product);
+    toast.success('Added to Cart', {
+      description: `${name} has been added to your cart`,
+      action: {
+        label: 'View Cart',
+        onClick: () => handleCartClick(),
+      },
+    });
+  };
+
   return (
     <Button
-      onClick={() => {
-        addItem(product);
-        handleCartClick();
-      }}
+      onClick={handleAddToCart}
+      className="w-full py-6 text-lg bg-black hover:bg-gray-800 text-white rounded-full"
     >
       Add To Cart
     </Button>

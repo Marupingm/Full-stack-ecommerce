@@ -1,5 +1,4 @@
 import AddToBag from "@/app/components/AddToBag";
-import CheckoutNow from "@/app/components/CheckoutNow";
 import ImageGallery from "@/app/components/ImageGallery";
 import connectDB from "@/lib/mongodb";
 import Product from "@/models/Product";
@@ -80,17 +79,9 @@ export default async function ProductPage({
               </div>
             </div>
 
-            <div className="flex gap-2.5">
+            <div className="w-full">
               <AddToBag
                 key={product._id}
-                id={product._id}
-                name={product.name}
-                description={product.description}
-                price={product.price}
-                image={product.images[0]}
-              />
-              <CheckoutNow
-                key={`${product._id}-checkout`}
                 id={product._id}
                 name={product.name}
                 description={product.description}
