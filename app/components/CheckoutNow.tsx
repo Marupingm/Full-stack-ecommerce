@@ -80,15 +80,15 @@ export default function CheckoutNow({
       };
 
       // Remove merchant_key before generating signature (it should not be included in the signature)
-      const signatureFields = { ...fields };
+      const signatureFields = { ...fields } as Record<string, string>;
       delete signatureFields.merchant_key;
 
       // Generate signature
       const signature = await generateSignature(signatureFields);
-      fields['signature'] = signature;
+      const updatedFields = { ...fields, signature };
 
       // Add fields to form (excluding merchant_key)
-      Object.entries(fields).forEach(([key, value]) => {
+      Object.entries(updatedFields).forEach(([key, value]) => {
         if (key !== 'merchant_key') { // Don't include merchant_key in the form
           const input = document.createElement('input');
           input.type = 'hidden';
@@ -99,7 +99,7 @@ export default function CheckoutNow({
       });
 
       // Debug form data before submission
-      console.log('PayFast checkout fields:', { ...fields, merchant_key: '[HIDDEN]' });
+      console.log('PayFast checkout fields:', { ...updatedFields, merchant_key: '[HIDDEN]' });
 
       // Add form to body and submit
       document.body.appendChild(form);

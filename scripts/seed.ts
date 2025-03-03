@@ -98,7 +98,7 @@ async function seedProducts() {
   try {
     console.log('Starting database connection...');
     // Connect directly using mongoose
-    await mongoose.connect(MONGODB_URI);
+    await mongoose.connect(MONGODB_URI as string);
     console.log('Database connected successfully');
 
     // Clear existing products

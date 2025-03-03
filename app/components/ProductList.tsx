@@ -45,9 +45,9 @@ async function getData() {
     return JSON.parse(JSON.stringify(products));
   } catch (error) {
     console.error("Error fetching products:", {
-      name: error.name,
-      message: error.message,
-      stack: error.stack
+      name: error instanceof Error ? error.name : 'Unknown Error',
+      message: error instanceof Error ? error.message : 'An unknown error occurred',
+      stack: error instanceof Error ? error.stack : undefined
     });
     return [];
   }

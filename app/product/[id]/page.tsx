@@ -27,6 +27,10 @@ async function getData(id: string) {
     await connectDB();
     const product = await Product.findById(id).lean();
     
+    if (!product) {
+      return { product: null, similarProducts: [] };
+    }
+
     // Fetch similar products (same category, different ID)
     const similarProducts = await Product.find({
       category: product.category,

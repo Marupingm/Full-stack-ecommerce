@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
-import Order from '@/app/models/Order';
+import Order from '../../../models/Order';
 
 export async function POST(req: Request) {
   try {
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
 
     // Get the item names from cart
     const itemNames = Object.values(cartDetails)
-      .map(item => item.name)
+      .map((item: any) => item.name)
       .join(', ');
 
     // Get the base URL for the application
