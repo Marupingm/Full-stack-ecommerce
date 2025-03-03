@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "node scripts/seed.cjs"
+    "seed": "curl -X GET http://localhost:3000/api/seed",
+    "setup-images": "ts-node scripts/setup-images.ts"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.5",

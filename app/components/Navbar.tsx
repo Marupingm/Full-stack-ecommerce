@@ -22,15 +22,16 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b transition-all duration-300">
       <div className="flex items-center justify-between mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl h-16 lg:h-20">
+        {/* Logo - Visible on both mobile and desktop */}
         <Link href="/" className="flex items-center space-x-2">
           <ShoppingCart className="h-8 w-8 text-blue-600" />
           <h1 className="text-2xl md:text-3xl font-bold">
-            Topsy<span className="text-blue-600">Commerce</span>
+            Top<span className="text-blue-600">sy</span>
           </h1>
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden gap-8 lg:flex 2xl:ml-16">
+        <nav className="hidden lg:flex gap-8 2xl:ml-16">
           {links.map((link, idx) => (
             <div key={idx}>
               {pathname === link.href ? (
@@ -52,8 +53,8 @@ export default function Navbar() {
           ))}
         </nav>
 
+        {/* Cart and Mobile Menu Buttons */}
         <div className="flex items-center gap-4">
-          {/* Cart Button */}
           <Button
             variant={"outline"}
             onClick={() => handleCartClick()}
@@ -67,7 +68,7 @@ export default function Navbar() {
             )}
           </Button>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button - Only visible on mobile */}
           <Button
             variant={"outline"}
             className="lg:hidden h-12 w-12 rounded-full border hover:bg-blue-50 transition-all duration-300"
@@ -78,52 +79,27 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
-      <div
-        className={`lg:hidden fixed inset-x-0 bg-white border-b transform ${
-          isMobileMenuOpen ? "translate-y-0" : "-translate-y-full"
-        } transition-transform duration-300 ease-in-out`}
-      >
-        <div className="flex items-center justify-between p-4 border-b">
-          <Link href="/" className="flex items-center space-x-2" onClick={() => setIsMobileMenuOpen(false)}>
-            <ShoppingCart className="h-6 w-6 text-blue-600" />
-            <h1 className="text-xl font-bold">
-              Topsy<span className="text-blue-600">Commerce</span>
-            </h1>
-          </Link>
-          <Button
-            variant={"outline"}
-            onClick={() => {
-              handleCartClick();
-              setIsMobileMenuOpen(false);
-            }}
-            className="relative flex items-center justify-center h-10 w-10 rounded-full border hover:bg-blue-50 transition-all duration-300"
-          >
-            <ShoppingBag className="h-4 w-4" />
-            {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                {cartCount}
-              </span>
-            )}
-          </Button>
+      {/* Mobile Navigation - Only rendered on mobile and when menu is open */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden fixed inset-x-0 top-16 bg-white border-b shadow-lg">
+          <nav className="flex flex-col p-4 space-y-3">
+            {links.map((link, idx) => (
+              <Link
+                key={idx}
+                href={link.href}
+                className={`text-lg font-semibold p-2 rounded-lg transition-all duration-300 ${
+                  pathname === link.href
+                    ? "text-blue-600 bg-blue-50"
+                    : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
+                }`}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {link.name}
+              </Link>
+            ))}
+          </nav>
         </div>
-        <nav className="flex flex-col p-4 space-y-3">
-          {links.map((link, idx) => (
-            <Link
-              key={idx}
-              href={link.href}
-              className={`text-lg font-semibold p-2 rounded-lg transition-all duration-300 ${
-                pathname === link.href
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
-              }`}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              {link.name}
-            </Link>
-          ))}
-        </nav>
-      </div>
+      )}
     </header>
   );
 }

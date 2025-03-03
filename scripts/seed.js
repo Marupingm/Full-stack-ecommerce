@@ -23,7 +23,7 @@ if (!MONGODB_URI) {
   process.exit(1);
 }
 
-// Import Product model after environment variables are loaded
+// Import Product model
 const Product = require('../app/models/Product');
 
 const products = [
@@ -33,10 +33,9 @@ const products = [
     price: 20000,
     category: "Men",
     images: [
-      "/ProductOne/1.png",
-      "/ProductOne/2.png",
-      "/ProductOne/3.png",
-      "/ProductOne/4.png"
+      "/ProductOne/air-vapormax-2023-flyknit-herrenschuh-xgCQsr.jpeg",
+      "/ProductOne/3ee3420f-0395-47e9-b852-65c9e04a877d.webp",
+      "/ProductOne/600e6348-ab0e-4de4-9936-60a98594254f.webp"
     ],
     sizes: ["US 7", "US 8", "US 9", "US 10", "US 11"]
   },
@@ -46,10 +45,8 @@ const products = [
     price: 3500,
     category: "Women",
     images: [
-      "/ProductTwo/1.png",
-      "/ProductTwo/2.png",
-      "/ProductTwo/3.png",
-      "/ProductTwo/4.png"
+      "/ProductTwo/795c66fd-1efc-4fb3-95c8-455ae2d390e9.png",
+      "/ProductTwo/af318846-4fcb-4b8f-b13c-f7ddfe17d519.webp"
     ],
     sizes: ["XS", "S", "M", "L", "XL"]
   },
@@ -59,10 +56,9 @@ const products = [
     price: 8500,
     category: "Teens",
     images: [
-      "/ProductThree/1.png",
-      "/ProductThree/2.png",
-      "/ProductThree/3.png",
-      "/ProductThree/4.png"
+      "/ProductThree/0453f3b6-c33b-44a6-bd68-3732ac2b8bf2.jpg",
+      "/ProductThree/72a3b44a-3e4c-44b7-b614-835b9d28bcc9.webp",
+      "/ProductThree/3811255b-206e-4fd2-9477-1739c97ecc80.webp"
     ],
     sizes: ["US 6", "US 7", "US 8", "US 9", "US 10"]
   },
@@ -72,10 +68,9 @@ const products = [
     price: 20000,
     category: "Men",
     images: [
-      "/ProductFour/1.png",
-      "/ProductFour/2.png",
-      "/ProductFour/3.png",
-      "/ProductFour/4.png"
+      "/ProductFour/windrunner-herren-laufjacke-k4q9TV (1).jpeg",
+      "/ProductFour/939da2cf-40ac-4963-ae88-a9098fd32929.jpg",
+      "/ProductFour/2214184d-d5ab-4ac6-aac8-5670a08bb373.webp"
     ],
     sizes: ["S", "M", "L", "XL", "XXL"]
   }
