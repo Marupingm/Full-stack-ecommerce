@@ -4,6 +4,8 @@ import connectDB from "@/lib/mongodb";
 import Product from "@/models/Product";
 import AddToCartButton from "@/app/components/AddToCartButton";
 
+export const dynamic = "force-dynamic";
+
 interface ProductType {
   _id: string;
   name: string;
@@ -33,8 +35,6 @@ async function getData(category: string) {
     return [];
   }
 }
-
-export const dynamic = "force-dynamic";
 
 export default async function CategoryPage({
   params,

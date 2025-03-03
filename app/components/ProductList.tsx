@@ -4,6 +4,8 @@ import connectDB from "@/lib/mongodb";
 import Product from "@/models/Product";
 import AddToCartButton from "./AddToCartButton";
 
+export const dynamic = "force-dynamic";
+
 interface ProductType {
   _id: string;
   name: string;
@@ -23,15 +25,30 @@ function formatPrice(price: number) {
 
 async function getData() {
   try {
+    console.log('Connecting to database...');
     await connectDB();
+    console.log('Connected to database, fetching products...');
+    
     const products = await Product.find({})
       .sort({ createdAt: -1 })
       .limit(20)
       .lean();
 
+    console.log(`Found ${products.length} products`);
+    
+    if (products.length === 0) {
+      console.log('No products found in database');
+    } else {
+      console.log('Sample product:', products[0]);
+    }
+
     return JSON.parse(JSON.stringify(products));
   } catch (error) {
-    console.error("Error fetching products:", error);
+    console.error("Error fetching products:", {
+      name: error.name,
+      message: error.message,
+      stack: error.stack
+    });
     return [];
   }
 }
@@ -41,8 +58,9 @@ export default async function ProductList() {
 
   if (!products || products.length === 0) {
     return (
-      <div className="flex justify-center items-center h-96">
-        <p className="text-gray-500">No products found. Please add some products first.</p>
+      <div className="flex flex-col justify-center items-center h-96">
+        <p className="text-gray-500 mb-4">No products found.</p>
+        <p className="text-sm text-gray-400">Please ensure the database is properly seeded.</p>
       </div>
     );
   }

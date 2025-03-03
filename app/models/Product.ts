@@ -22,6 +22,16 @@ const ProductSchema = new mongoose.Schema({
     type: [String],
     required: true,
   },
+  sizes: {
+    type: [String],
+    required: true,
+    validate: {
+      validator: function(v: string[]) {
+        return v.length > 0;
+      },
+      message: 'At least one size is required'
+    }
+  },
   createdAt: {
     type: Date,
     default: Date.now,

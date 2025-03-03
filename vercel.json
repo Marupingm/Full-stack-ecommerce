@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build && npm run seed",
+  "buildCommand": "npm run build",
   "devCommand": "next dev",
   "installCommand": "npm install",
   "framework": "nextjs",
@@ -8,6 +8,18 @@
     "MONGODB_URI": "WILL_BE_SET_IN_VERCEL_DASHBOARD",
     "NEXT_PUBLIC_PAYFAST_MERCHANT_ID": "WILL_BE_SET_IN_VERCEL_DASHBOARD",
     "NEXT_PUBLIC_PAYFAST_MERCHANT_KEY": "WILL_BE_SET_IN_VERCEL_DASHBOARD"
-  }
+  },
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
+  ]
 } // Modified on 2025-02-19 00:50:50
 // Modified on 2025-02-19 00:52:35
