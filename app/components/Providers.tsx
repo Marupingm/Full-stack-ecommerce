@@ -33,12 +33,9 @@ export default function Providers({ children }: { children: ReactNode }) {
             color: '#111827',
           },
           classNames: {
-            success: 'text-green-500',
-            error: 'text-red-500'
-          },
-          icon: {
-            success: <CheckCircle2 className="text-green-500 h-5 w-5" />,
-            error: <XCircle className="text-red-500 h-5 w-5" />
+            toast: 'group',
+            success: 'border-green-500',
+            error: 'border-red-500'
           }
         }}
       />
