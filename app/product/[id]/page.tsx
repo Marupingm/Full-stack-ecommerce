@@ -3,8 +3,9 @@ import ImageGallery from "@/app/components/ImageGallery";
 import SimilarProducts from "@/app/components/SimilarProducts";
 import connectDB from "@/lib/mongodb";
 import Product from "@/models/Product";
+import { Document } from 'mongoose';
 
-interface ProductType {
+interface ProductType extends Document {
   _id: string;
   name: string;
   description: string;
@@ -25,7 +26,7 @@ function formatPrice(price: number) {
 async function getData(id: string) {
   try {
     await connectDB();
-    const product = await Product.findById(id).lean();
+    const product = await Product.findById(id).lean() as ProductType | null;
     
     if (!product) {
       return { product: null, similarProducts: [] };
@@ -37,7 +38,7 @@ async function getData(id: string) {
       _id: { $ne: id }
     })
     .limit(8)
-    .lean();
+    .lean() as ProductType[];
 
     return {
       product: JSON.parse(JSON.stringify(product)),
