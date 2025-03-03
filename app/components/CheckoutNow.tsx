@@ -10,6 +10,27 @@ interface CheckoutNowProps {
   id: string;
 }
 
+// Helper function to generate MD5 hash
+const generateSignature = async (data: Record<string, string>, passPhrase: string = '') => {
+  // Create parameter string
+  const paramString = Object.entries(data)
+    .sort(([keyA], [keyB]) => keyA.localeCompare(keyB)) // Sort keys alphabetically
+    .map(([key, value]) => `${key}=${encodeURIComponent(value.trim())}`)
+    .join('&');
+
+  // Add passphrase if it exists
+  const stringToHash = `${paramString}${passPhrase ? `&passphrase=${encodeURIComponent(passPhrase)}` : ''}`;
+  
+  // Use TextEncoder and crypto.subtle to create MD5 hash
+  const encoder = new TextEncoder();
+  const data_buffer = encoder.encode(stringToHash);
+  const hash_buffer = await crypto.subtle.digest('SHA-512', data_buffer);
+  const hash_array = Array.from(new Uint8Array(hash_buffer));
+  const hash_hex = hash_array.map(b => b.toString(16).padStart(2, '0')).join('');
+  
+  return hash_hex;
+};
+
 export default function CheckoutNow({
   name,
   description,
@@ -17,7 +38,7 @@ export default function CheckoutNow({
   image,
   id,
 }: CheckoutNowProps) {
-  const handlePayFastCheckout = () => {
+  const handlePayFastCheckout = async () => {
     try {
       const timestamp = new Date().toISOString().replace(/[-:.]/g, '');
       const paymentId = `PF_${timestamp}_${id}`;
@@ -30,55 +51,55 @@ export default function CheckoutNow({
       const merchantId = process.env.NEXT_PUBLIC_PAYFAST_MERCHANT_ID;
       const merchantKey = process.env.NEXT_PUBLIC_PAYFAST_MERCHANT_KEY;
 
-      // Debug log for credentials
-      console.log('PayFast Credentials:', {
-        merchantId: merchantId || 'Not set',
-        merchantKeyLength: merchantKey ? merchantKey.length : 0
-      });
-
       if (!merchantId || !merchantKey) {
         console.error('PayFast credentials are not properly configured');
         return;
       }
 
-      // Format price to 2 decimal places
-      const formattedPrice = Number(price).toFixed(2);
+      // Format price to 2 decimal places without currency symbol
+      const formattedPrice = (price / 100).toFixed(2);
 
       // Add PayFast required fields
       const fields = {
         merchant_id: merchantId,
         merchant_key: merchantKey,
-        amount: formattedPrice,
-        item_name: name,
-        item_description: description,
         return_url: `${window.location.origin}/success`,
         cancel_url: `${window.location.origin}/cancel`,
         notify_url: `${window.location.origin}/api/payfast/notify`,
+        amount: formattedPrice,
+        item_name: name.substring(0, 100),
         m_payment_id: paymentId,
-        email_confirmation: '1',
-        confirmation_address: 'test@example.com',
+        // Use a different email for customer (not the same as merchant email)
+        email_address: 'customer@example.com',
         name_first: 'Test',
         name_last: 'Customer',
-        email_address: 'test@example.com'
+        cell_number: '0821234567',
+        custom_str1: id,
+        // Sandbox testing parameters
+        testing: 'true'
       };
 
-      console.log('PayFast checkout fields:', fields);
+      // Remove merchant_key before generating signature (it should not be included in the signature)
+      const signatureFields = { ...fields };
+      delete signatureFields.merchant_key;
 
-      // Add fields to form
+      // Generate signature
+      const signature = await generateSignature(signatureFields);
+      fields['signature'] = signature;
+
+      // Add fields to form (excluding merchant_key)
       Object.entries(fields).forEach(([key, value]) => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = key;
-        input.value = value.toString();
-        form.appendChild(input);
+        if (key !== 'merchant_key') { // Don't include merchant_key in the form
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = value.toString();
+          form.appendChild(input);
+        }
       });
 
       // Debug form data before submission
-      const formData = new FormData(form);
-      console.log('Form data before submission:');
-      Array.from(formData.entries()).forEach(([key, value]) => {
-        console.log(`${key}: ${value}`);
-      });
+      console.log('PayFast checkout fields:', { ...fields, merchant_key: '[HIDDEN]' });
 
       // Add form to body and submit
       document.body.appendChild(form);
