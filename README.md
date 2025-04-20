@@ -54,7 +54,7 @@ Follow these steps to set up the project locally:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/full-stack-ecommerce.git
+   git clone https://github.com/Marupingm/full-stack-ecommerce.git
    cd full-stack-ecommerce
    ```
 
@@ -157,9 +157,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-Project Lead - [Your Name](mailto:your.email@example.com)
+Project Lead - Maruping
 
-Project Repository: [https://github.com/yourusername/full-stack-ecommerce](https://github.com/yourusername/full-stack-ecommerce)
 
 ---
 
